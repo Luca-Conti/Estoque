@@ -32,9 +32,9 @@ def vendas():
         input('Aperte Enter ')
         vendas()
     else:
+        resposta_s_n(f'O Valor da compra é de {valor} quer proseguir? (s/n) ')
         produto_selecionado.qnt -= vendidos
         valor = vendidos * produto_selecionado.preco
-        resposta_s_n(f'O Valor da compra é de {valor} quer proseguir? (s/n) ')
         print(f'Falta {produto_selecionado.qnt}')
         print('[green]Produtos vendidos com sucesso![/]')
         volta_para_o_menu()
