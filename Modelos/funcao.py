@@ -9,69 +9,77 @@ from os import system
 install()
 
 def volta_para_o_menu():
-    input('Digite algo para voltar paara o menu: ')
-    menu()
+    input('Aperte enter para voltar pro menu: ')
 
 def erro():
     print('[red]Algo deu errado[/]')
     volta_para_o_menu()
-
+    
 def vendas():
     titulo('Vender Produtos')
+    if not lista_de_produto:
+        print("Você não tem nenhum produto cadastrado.")
+        input('aperte enter para ir cadastrar um produto: ')
+        cadastrar_produto()
+        return
     for indice, produtos in enumerate(lista_de_produto, start=1):
         print(indice, produtos.nome)
     print("\n(Digite 0 para voltar ao menu principal)")
     escolha = int(input('\nEscolha qual produto você vai vender: '))
     if escolha == 0:
         volta_para_o_menu()
+        return
     produto_selecionado = lista_de_produto[escolha - 1]
     print(f"Você selecionou: {produto_selecionado.nome}")
     vendidos = int(input('Quantos produtos você vendeu? '))
-    if vendidos >= produto_selecionado.qnt:
+    if vendidos > produto_selecionado.qnt:
         print('[red] Você esta tentando vendar mais produto que você tem.[/] Tente novamente.')
         input('Aperte Enter ')
         vendas()
     else:
+        valor = vendidos * produto_selecionado.preco
         resposta_s_n(f'O Valor da compra é de {valor} quer proseguir? (s/n) ')
         produto_selecionado.qnt -= vendidos
-        valor = vendidos * produto_selecionado.preco
         print(f'Falta {produto_selecionado.qnt}')
         print('[green]Produtos vendidos com sucesso![/]')
         volta_para_o_menu()
 
 def menu():
-    system('cls')
-    try:
-        print(r""" ________              __                                             
-    /        |            /  |                                            
-    $$$$$$$$/   _______  _$$ |_     ______    ______   __    __   ______  
-    $$ |__     /       |/ $$   |   /      \  /      \ /  |  /  | /      \ 
-    $$    |   /$$$$$$$/ $$$$$$/   /$$$$$$  |/$$$$$$  |$$ |  $$ |/$$$$$$  |
-    $$$$$/    $$      \   $$ | __ $$ |  $$ |$$ |  $$ |$$ |  $$ |$$    $$ |
-    $$ |_____  $$$$$$  |  $$ |/  |$$ \__$$ |$$ \__$$ |$$ \__$$ |$$$$$$$$/ 
-    $$       |/     $$/   $$  $$/ $$    $$/ $$    $$ |$$    $$/ $$       |
-    $$$$$$$$/ $$$$$$$/     $$$$/   $$$$$$/   $$$$$$$ | $$$$$$/   $$$$$$$/ 
-                                                $$ |                    
-                                                $$ |                    
-                                                $$/                     
-    """)
-        numero_pergunta = int(input('Digite 0 para fechar o programa \n 1 para Cadastrar um Produto\n 2 para ver os produtos cadastrados\n 3 para vender um produto\n 4 para calcular patrimonio: '))
+    while True:
+        system('cls')
+        try:
+            print(r""" ________              __                                             
+        /        |            /  |                                            
+        $$$$$$$$/   _______  _$$ |_     ______    ______   __    __   ______  
+        $$ |__     /       |/ $$   |   /      \  /      \ /  |  /  | /      \ 
+        $$    |   /$$$$$$$/ $$$$$$/   /$$$$$$  |/$$$$$$  |$$ |  $$ |/$$$$$$  |
+        $$$$$/    $$      \   $$ | __ $$ |  $$ |$$ |  $$ |$$ |  $$ |$$    $$ |
+        $$ |_____  $$$$$$  |  $$ |/  |$$ \__$$ |$$ \__$$ |$$ \__$$ |$$$$$$$$/ 
+        $$       |/     $$/   $$  $$/ $$    $$/ $$    $$ |$$    $$/ $$       |
+        $$$$$$$$/ $$$$$$$/     $$$$/   $$$$$$/   $$$$$$$ | $$$$$$/   $$$$$$$/ 
+                                                    $$ |                    
+                                                    $$ |                    
+                                                    $$/                     
+        """)
+            numero_pergunta = int(input('Digite 0 para fechar o programa \n 1 para Cadastrar um Produto\n 2 para ver os produtos cadastrados\n 3 para vender um produto\n 4 para calcular patrimonio: '))
 
-        if numero_pergunta == 1:
-            cadastrar_produto()
-        elif numero_pergunta == 0:
-            fechar()
-        elif numero_pergunta == 2:
-            ver_produto_cadastrado()
-        elif numero_pergunta == 3:
-            vendas()
-        elif numero_pergunta == 4:
-            calcular_patrimonio(lista_de_produto)
-        else:
+            if numero_pergunta == 1:
+                cadastrar_produto()
+            elif numero_pergunta == 0:
+                    titulo('Fechar Programa')
+                    resposta_s_n(texto='Você quer fechar o programa? (s/n) ')
+                    break
+            elif numero_pergunta == 2:
+                ver_produto_cadastrado()
+            elif numero_pergunta == 3:
+                vendas()
+            elif numero_pergunta == 4:
+                calcular_patrimonio(lista_de_produto)
+            else:
+                erro()
+        except Exception as e:
+            print(f"Ocorreu um erro: {e}")
             erro()
-    except Exception as e:
-        print(f"Ocorreu um erro: {e}")
-        erro()
 
 def titulo(texto):
     system('cls')
@@ -138,10 +146,6 @@ def calcular_patrimonio(lista_de_produtos_outro):
     )
     print(painel)
     volta_para_o_menu()
-
-def fechar():
-    titulo('Fechar Programa')
-    resposta_s_n(texto='Você quer fechar o programa? (s/n) ')
 
 def resposta_s_n(texto):
     resposta = input(texto).lower()
