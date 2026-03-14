@@ -1,5 +1,3 @@
-from rich import print
-
 class Produto:
     
     def __init__(self, nome, preco, id, qnt):

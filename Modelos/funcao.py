@@ -61,7 +61,7 @@ def menu():
                                                     $$ |                    
                                                     $$/                     
         """)
-            numero_pergunta = int(input('Digite 0 para fechar o programa \n 1 para Cadastrar um Produto\n 2 para ver os produtos cadastrados\n 3 para vender um produto\n 4 para calcular patrimonio: '))
+            numero_pergunta = int(input('Digite 0 para fechar o programa \n 1 para Cadastrar um Produto\n 2 para ver os produtos cadastrados\n 3 para vender um produto\n 4 para calcular patrimonio\n 5 para mudar o preço de um produto: '))
 
             if numero_pergunta == 1:
                 cadastrar_produto()
@@ -75,6 +75,8 @@ def menu():
                 vendas()
             elif numero_pergunta == 4:
                 calcular_patrimonio(lista_de_produto)
+            elif numero_pergunta == 5:
+               mudar_preco()
             else:
                 erro()
         except Exception as e:
@@ -86,6 +88,27 @@ def titulo(texto):
     caixa = Panel(f'[red]{texto}[/]')
     print(caixa)
 
+def mudar_preco():
+    titulo('Mudar Preço do Produto')
+    if not lista_de_produto:
+        print('[red]Você nāo tem nenhum produto cadastrado[/]\nVolte ao menu para cadastrar.')
+        volta_para_o_menu()
+        return 
+    for indice, produtos in enumerate(lista_de_produto, start=1):
+        print(indice, produtos.nome)
+        print('Digite 0 para voltar ao menu principal')
+    escolha = int(input('Escolha qual produto você vai mudar o preço: '))
+    if escolha == 0:
+        volta_para_o_menu()
+        return
+    produto_selecionado = lista_de_produto[escolha - 1]
+    print(f"Você selecionou: {produto_selecionado.nome}")
+    resposta_s_n(f'O preço atual do produto é R${produto_selecionado.preco:.2f}. Quer mudar o preço? (s/n) ')
+    novo_preco = float(input('Digite o novo preço: '))
+    produto_selecionado.preco = novo_preco
+    print(f'[green]Preço atualizado para R${novo_preco:.2f} com sucesso![/]')
+    volta_para_o_menu()
+
 def gerador_de_id(nome):
     numero_aleatorio = randint(100, 999)
     letras = nome[:2].upper() 
@@ -95,7 +118,7 @@ lista_de_produto = []
 
 def cadastrar_produto():
     titulo('Cadrastar Produto')
-    nome_do_produto = input('Qual o nome do produto? ')
+    nome_do_produto = input('Qual o nome do produto? ').title()
     preco = float(input('Qual o preço do produto? '))
     quantidade = int(input('Qual a quantidade que você tem do produto? '))
     codigo_id = gerador_de_id(nome=nome_do_produto)
